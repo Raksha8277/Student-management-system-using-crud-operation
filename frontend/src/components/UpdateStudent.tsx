@@ -42,35 +42,60 @@ function UpdateStudent() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <form onSubmit={handleUpdate} className="bg-white p-6 rounded-xl shadow-md space-y-4">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex flex-col items-center justify-center p-6">
 
-        <h2 className="text-xl font-bold">Update Student</h2>
+      <h1 className="text-4xl font-bold text-white mb-8 text-center drop-shadow-lg">
+         Update Student
+      </h1>
+
+      <form
+        onSubmit={handleUpdate}
+        className="backdrop-blur-lg bg-white/20 border border-white/30 shadow-2xl rounded-2xl p-8 w-full max-w-md space-y-5 text-white"
+      >
 
         <input
           type="text"
           value={name}
           onChange={e => setName(e.target.value)}
-          className="border p-2 w-full"
+          placeholder="Enter Name"
+          className="w-full p-3 rounded-lg bg-white/30 placeholder-white text-black focus:outline-none focus:ring-2 focus:ring-white"
         />
 
         <input
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          className="border p-2 w-full"
+          placeholder="Enter Email"
+          className="w-full p-3 rounded-lg bg-white/30 placeholder-white text-black focus:outline-none focus:ring-2 focus:ring-white"
         />
 
         <input
           type="number"
           value={age}
           onChange={e => setAge(e.target.value)}
-          className="border p-2 w-full"
+          placeholder="Enter Age"
+          className="w-full p-3 rounded-lg bg-white/30 placeholder-white text-black focus:outline-none focus:ring-2 focus:ring-white"
         />
 
-        <button type="submit" className="bg-indigo-500 text-white px-4 py-2">
-          {loading ? "Updating..." : "Update"}
-        </button>
+        <div className="flex gap-3 pt-2">
+
+          <button
+            type="submit"
+            className="w-full bg-blue-400 text-white font-semibold py-3 rounded-xl shadow-md hover:bg-indigo-500 transition"
+            disabled={loading}
+          >
+            {loading ? "Updating..." : "Update"}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => navigate("/")}
+            className="w-full bg-red-400 text-white font-semibold py-3 rounded-xl shadow-md hover:bg-red-500 transition"
+          >
+            Cancel
+          </button>
+
+        </div>
 
       </form>
     </div>
