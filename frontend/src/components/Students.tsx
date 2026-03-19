@@ -39,8 +39,7 @@ function Students() {
           </Link>
         </div>
 
-        <div className="backdrop-blur-lg bg-white/20 border border-white/30 shadow-2xl rounded-2xl overflow-hidden">
-
+        <div className="hidden md:block backdrop-blur-lg bg-white/20 border border-white/30 shadow-2xl rounded-2xl overflow-hidden">
           <table className="w-full text-left text-white">
             <thead>
               <tr className="bg-white/30 uppercase text-sm tracking-wider">
@@ -83,13 +82,50 @@ function Students() {
 
           {students.length === 0 && (
             <div className="text-center p-10 text-white">
-              <p className="text-lg font-semibold">No students found </p>
+              <p className="text-lg font-semibold">No students found</p>
               <p className="text-sm opacity-80 mt-2">
                 Click "Add Student" to create one
               </p>
             </div>
           )}
+        </div>
 
+        <div className="md:hidden space-y-4">
+          {students.length === 0 ? (
+            <div className="text-center p-10 text-white">
+              <p className="text-lg font-semibold">No students found</p>
+              <p className="text-sm opacity-80 mt-2">
+                Click "Add Student" to create one
+              </p>
+            </div>
+          ) : (
+            students.map((s) => (
+              <div
+                key={s._id}
+                className="backdrop-blur-lg bg-white/20 border border-white/30 shadow-xl rounded-2xl p-4 text-white"
+              >
+                <p className="font-semibold text-lg">{s.name}</p>
+                <p className="text-sm opacity-90">{s.email}</p>
+                <p className="text-sm mt-1">Age: {s.age}</p>
+
+                <div className="flex gap-2 mt-3">
+                  <Link
+                    to={`/update/${s._id}`}
+                    className="flex-1 text-center px-3 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm"
+                  >
+                    Edit
+                  </Link>
+
+                  <button
+                    onClick={() => handleDelete(s._id)}
+                    className="flex-1 px-3 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
         </div>
 
       </div>
