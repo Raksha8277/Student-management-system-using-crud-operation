@@ -22,26 +22,28 @@ function Students() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-400 via-purple-300 to-indigo-400 flex items-center justify-center p-6">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex flex-col items-center justify-start p-6">
 
-        <div className="bg-white shadow-xl rounded-2xl p-6 mb-6 flex justify-between items-center">
-          <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-            🎓 Student Management
-          </h1>
+      <h1 className="text-4xl font-bold text-white mb-8 text-center drop-shadow-lg">
+        🎓 Student Dashboard
+      </h1>
 
+      <div className="w-full max-w-6xl">
+
+        <div className="flex justify-end mb-4">
           <Link
             to="/create"
-            className="bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2 rounded-xl"
+            className="bg-white text-indigo-700 font-semibold px-5 py-2 rounded-xl shadow-md hover:bg-indigo-100 transition"
           >
-            Add Student
+             Add Student
           </Link>
         </div>
 
-        <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
-          <table className="w-full text-left">
+        <div className="backdrop-blur-lg bg-white/20 border border-white/30 shadow-2xl rounded-2xl overflow-hidden">
+
+          <table className="w-full text-left text-white">
             <thead>
-              <tr className="bg-indigo-500 text-white">
+              <tr className="bg-white/30 uppercase text-sm tracking-wider">
                 <th className="p-4">Name</th>
                 <th className="p-4">Email</th>
                 <th className="p-4">Age</th>
@@ -51,19 +53,25 @@ function Students() {
 
             <tbody>
               {students.map((s) => (
-                <tr key={s._id} className="border-b hover:bg-indigo-50">
-                  <td className="p-4">{s.name}</td>
+                <tr
+                  key={s._id}
+                  className="border-b border-white/20 hover:bg-white/10 transition"
+                >
+                  <td className="p-4 font-medium">{s.name}</td>
                   <td className="p-4">{s.email}</td>
                   <td className="p-4">{s.age}</td>
 
-                  <td className="p-4 text-center space-x-3">
-                    <Link to={`/update/${s._id}`} className="text-blue-600">
+                  <td className="p-4 text-center space-x-2">
+                    <Link
+                      to={`/update/${s._id}`}
+                      className="px-3 py-1 rounded-lg bg-blue-500 hover:bg-blue-600 text-white text-sm shadow"
+                    >
                       Edit
                     </Link>
 
                     <button
                       onClick={() => handleDelete(s._id)}
-                      className="text-red-600"
+                      className="px-3 py-1 rounded-lg bg-red-500 hover:bg-red-600 text-white text-sm shadow"
                     >
                       Delete
                     </button>
@@ -73,9 +81,16 @@ function Students() {
             </tbody>
           </table>
 
+          {/* Empty State */}
           {students.length === 0 && (
-            <div className="text-center p-6">No students found</div>
+            <div className="text-center p-10 text-white">
+              <p className="text-lg font-semibold">No students found </p>
+              <p className="text-sm opacity-80 mt-2">
+                Click "Add Student" to create one
+              </p>
+            </div>
           )}
+
         </div>
 
       </div>
