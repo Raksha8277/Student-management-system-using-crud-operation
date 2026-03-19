@@ -1,42 +1,72 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const cors = require('cors')
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
 
-const app = express()
+const app = express();
 
-app.use(cors())
-app.use(express.json())
+app.use(cors({
+  origin: "*"
+}));
+app.use(express.json());
 
-mongoose.connect("mongodb://127.0.0.1:27017/studentDB")
-.then(() => console.log("MongoDB Connected"))
-.catch(err => console.log(err))
+app.get("/", (req, res) => {
+  res.send("Backend is running successfully");
+});
 
-const Student = require('./models/Student')
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log("MongoDB Error:", err));
 
-app.post('/create', (req, res) => {
-  Student.create(req.body)
-    .then(result => res.json(result))
-    .catch(err => res.json(err))
-})
+const Student = require('./models/Student');
 
-app.get('/students', (req, res) => {
-  Student.find()
-    .then(result => res.json(result))
-    .catch(err => res.json(err))
-})
+app.post('/create', async (req, res) => {
+  try {
+    console.log("REQUEST BODY:", req.body); // debug
 
-app.put('/update/:id', (req, res) => {
-  Student.findByIdAndUpdate(req.params.id, req.body)
-    .then(result => res.json(result))
-    .catch(err => res.json(err))
-})
+    const result = await Student.create(req.body);
+    res.json(result);
+  } catch (err) {
+    console.error("CREATE ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
-app.delete('/delete/:id', (req, res) => {
-  Student.findByIdAndDelete(req.params.id)
-    .then(result => res.json(result))
-    .catch(err => res.json(err))
-})
+app.get('/students', async (req, res) => {
+  try {
+    const result = await Student.find();
+    res.json(result);
+  } catch (err) {
+    console.error("GET ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
 
-app.listen(3001, () => {
-  console.log("Server running on port 3001")
-})
+app.put('/update/:id', async (req, res) => {
+  try {
+    const result = await Student.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.json(result);
+  } catch (err) {
+    console.error("UPDATE ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete('/delete/:id', async (req, res) => {
+  try {
+    const result = await Student.findByIdAndDelete(req.params.id);
+    res.json(result);
+  } catch (err) {
+    console.error("DELETE ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+const PORT = process.env.PORT || 3001;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
