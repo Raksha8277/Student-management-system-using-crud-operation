@@ -11,23 +11,19 @@ function UpdateStudent() {
   const [age, setAge] = useState("")
   const [loading, setLoading] = useState(false)
 
+  const API_URL = import.meta.env.VITE_API_URL
+
   useEffect(() => {
-    const fetchStudent = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/students")
+    axios.get(`${API_URL}/students`)
+      .then(res => {
         const student = res.data.find((s: any) => s._id === id)
         if (student) {
           setName(student.name)
           setEmail(student.email)
           setAge(student.age)
         }
-      } catch (error) {
-        console.error("Failed to fetch student:", error)
-        alert("Unable to fetch student data")
-      }
-    }
-
-    fetchStudent()
+      })
+      .catch(err => console.log(err))
   }, [id])
 
   const handleUpdate = async (e: React.FormEvent) => {
@@ -35,85 +31,48 @@ function UpdateStudent() {
     setLoading(true)
 
     try {
-      await axios.put(`http://localhost:3001/update/${id}`, { name, email, age })
+      await axios.put(`${API_URL}/update/${id}`, { name, email, age })
       navigate("/")
     } catch (error) {
-      console.error("Failed to update student:", error)
-      alert("Update failed. Please try again.")
+      console.error(error)
+      alert("Update failed")
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-400 via-purple-300 to-indigo-400 flex items-center justify-center p-6">
+    <div className="flex items-center justify-center min-h-screen">
+      <form onSubmit={handleUpdate} className="bg-white p-6 rounded-xl shadow-md space-y-4">
 
-      <div className="bg-white shadow-2xl rounded-3xl p-8 w-full max-w-md transform hover:scale-[1.01] transition duration-300">
+        <h2 className="text-xl font-bold">Update Student</h2>
 
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6 tracking-wide">
-           Update Student
-        </h2>
+        <input
+          type="text"
+          value={name}
+          onChange={e => setName(e.target.value)}
+          className="border p-2 w-full"
+        />
 
-        <form onSubmit={handleUpdate} className="space-y-5">
+        <input
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          className="border p-2 w-full"
+        />
 
-          <div className="relative">
-            <label className="block text-sm text-gray-600 mb-1">Name</label>
-            <input
-              type="text"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              className="w-full px-4 py-2 pl-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
-              required
-            />
-            <span className="absolute left-3 top-9 text-gray-400"></span>
-          </div>
+        <input
+          type="number"
+          value={age}
+          onChange={e => setAge(e.target.value)}
+          className="border p-2 w-full"
+        />
 
-          <div className="relative">
-            <label className="block text-sm text-gray-600 mb-1">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              className="w-full px-4 py-2 pl-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
-              required
-            />
-            <span className="absolute left-3 top-9 text-gray-400"></span>
-          </div>
+        <button type="submit" className="bg-indigo-500 text-white px-4 py-2">
+          {loading ? "Updating..." : "Update"}
+        </button>
 
-          <div className="relative">
-            <label className="block text-sm text-gray-600 mb-1">Age</label>
-            <input
-              type="number"
-              value={age}
-              onChange={e => setAge(e.target.value)}
-              className="w-full px-4 py-2 pl-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
-              required
-            />
-            <span className="absolute left-3 top-9 text-gray-400"></span>
-          </div>
-
-          <div className="flex justify-between items-center pt-3">
-
-            <button
-              type="button"
-              onClick={() => navigate("/")}
-              className="px-5 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition"
-            >
-              Cancel
-            </button>
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-6 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-semibold shadow-md transition flex items-center justify-center"
-            >
-              {loading ? "Updating..." : "Update"}
-            </button>
-
-          </div>
-
-        </form>
-      </div>
+      </form>
     </div>
   )
 }
