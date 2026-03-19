@@ -7,37 +7,36 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-
-const mongoURI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/studentDB";
-
-mongoose.connect(mongoURI)
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log(err))
+mongoose.connect("mongodb://127.0.0.1:27017/studentDB")
+.then(() => console.log("MongoDB Connected"))
+.catch(err => console.log(err))
 
 const Student = require('./models/Student')
 
-app.post('/api/create', (req, res) => {
+app.post('/create', (req, res) => {
   Student.create(req.body)
     .then(result => res.json(result))
     .catch(err => res.json(err))
 })
 
-app.get('/api/students', (req, res) => {
+app.get('/students', (req, res) => {
   Student.find()
     .then(result => res.json(result))
     .catch(err => res.json(err))
 })
 
-app.put('/api/update/:id', (req, res) => {
+app.put('/update/:id', (req, res) => {
   Student.findByIdAndUpdate(req.params.id, req.body)
     .then(result => res.json(result))
     .catch(err => res.json(err))
 })
 
-app.delete('/api/delete/:id', (req, res) => {
+app.delete('/delete/:id', (req, res) => {
   Student.findByIdAndDelete(req.params.id)
     .then(result => res.json(result))
     .catch(err => res.json(err))
 })
 
-module.exports = app;
+app.listen(3001, () => {
+  console.log("Server running on port 3001")
+})
