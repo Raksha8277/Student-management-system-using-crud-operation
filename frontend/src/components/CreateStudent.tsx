@@ -7,104 +7,94 @@ function CreateStudent() {
   const [email, setEmail] = useState("")
   const [age, setAge] = useState("")
   const [loading, setLoading] = useState(false)
-  const navigate = useNavigate()
 
-  const API_URL = import.meta.env.VITE_API_URL || '';
+  const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    
-    if (!name || !email || !age) {
-      alert("Please fill in all fields")
-      return
-    }
-
     setLoading(true)
-    
+
     try {
-      await axios.post(`${API_URL}/api/create`, { name, email, age })
+      await axios.post("http://localhost:3001/create", { name, email, age })
       navigate("/")
     } catch (error) {
       console.error("Error creating student:", error)
-      
-      if (API_URL) {
-        alert("Failed to create student. Please try again.")
-      } else {
-        alert("Failed to create student. Make sure the backend is running.")
-      }
+      alert("Failed to create student")
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-md mx-auto bg-white shadow-lg rounded-xl p-6">
-        <h2 className="text-2xl font-bold mb-6 text-center">Add New Student</h2>
+    <div className="min-h-screen bg-gradient-to-br from-pink-400 via-purple-300 to-indigo-400 flex items-center justify-center p-6">
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Name
-            </label>
+      <div className="bg-white shadow-2xl rounded-3xl p-8 w-full max-w-md">
+
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+           Add Student
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+
+          <div className="relative">
+            <label className="block text-sm text-gray-600 mb-1">Name</label>
             <input
               type="text"
-              placeholder="Enter student name"
               value={name}
               onChange={e => setName(e.target.value)}
-              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 pl-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
               required
             />
+            <span className="absolute left-3 top-9 text-gray-400"></span>
           </div>
 
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Email
-            </label>
+          {/* Email */}
+          <div className="relative">
+            <label className="block text-sm text-gray-600 mb-1">Email</label>
             <input
               type="email"
-              placeholder="Enter student email"
               value={email}
               onChange={e => setEmail(e.target.value)}
-              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 pl-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
               required
             />
+            <span className="absolute left-3 top-9 text-gray-400"></span>
           </div>
 
-          <div>
-            <label className="block text-gray-700 text-sm font-bold mb-2">
-              Age
-            </label>
+          {/* Age */}
+          <div className="relative">
+            <label className="block text-sm text-gray-600 mb-1">Age</label>
             <input
               type="number"
-              placeholder="Enter student age"
               value={age}
               onChange={e => setAge(e.target.value)}
-              className="border border-gray-300 rounded-lg p-3 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 pl-10 border rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
               required
-              min="1"
-              max="120"
             />
+            <span className="absolute left-3 top-9 text-gray-400"></span>
           </div>
 
-          <div className="flex gap-4 pt-4">
+          {/* Buttons */}
+          <div className="flex justify-between items-center pt-3">
+
             <button
               type="button"
               onClick={() => navigate("/")}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition duration-200 flex-1"
+              className="px-5 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition"
             >
               Cancel
             </button>
+
             <button
               type="submit"
               disabled={loading}
-              className={`bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg font-semibold transition duration-200 flex-1 ${
-                loading ? 'opacity-50 cursor-not-allowed' : ''
-              }`}
+              className="px-6 py-2 rounded-xl bg-indigo-500 hover:bg-indigo-600 text-white font-semibold shadow-md transition"
             >
-              {loading ? 'Creating...' : 'Submit'}
+              {loading ? "Submitting..." : "Submit"}
             </button>
+
           </div>
+
         </form>
       </div>
     </div>
